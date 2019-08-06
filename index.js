@@ -1,8 +1,12 @@
+require("./init");
+
 const express = require("express");
 const app = express();
 
 const authRoute = require("./routes/auth");
 const queryRoute = require("./routes/query");
+
+app.use(express.json());
 
 app.use("/user", authRoute);
 app.use("/api", queryRoute);
