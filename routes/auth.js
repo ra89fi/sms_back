@@ -150,11 +150,15 @@ router.post("/login", async (req, res) => {
     });
   console.log("user", user);
   if (!user) return;
+  // compare password
   const isValid = await bcrypt.compare(password, user.password);
   if (!isValid) return res.status(400).json({ password: "password does not match" });
   // create and assign token
   const token = jwt.sign({ id: user.id }, process.env.TOKEN_SECRET);
-  res.header("auth-token", token).send("OK");
+  res.set({
+    'Access-Control-Expose-Headers': 'Auth-Token',
+    'Auth-Token': token
+  }).send("OK");
 });
 
 module.exports = router;

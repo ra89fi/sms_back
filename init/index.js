@@ -1,5 +1,6 @@
 const connection = require("../db");
 
+// OK
 let query = `CREATE TABLE IF NOT EXISTS sms_users (
   id int(12) NOT NULL AUTO_INCREMENT,
   username varchar(32) NOT NULL,
