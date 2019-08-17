@@ -89,7 +89,7 @@ router.post("/register", async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     db.query(
-      `INSERT INTO sms_users (username, email, password) values (?, ?, ?)`,
+      `INSERT INTO sms_users (username, email, password) VALUES (?, ?, ?)`,
       [username, email, hashedPassword],
       (error, results, fields) => {
         if (error) {
