@@ -24,7 +24,6 @@ const registerSchema = {
 };
 
 router.post("/register", async (req, res) => {
-  console.log(req.body);
   // validate and register user
   const error = Joi.validate(req.body, registerSchema).error;
   if (error) {
@@ -38,9 +37,11 @@ router.post("/register", async (req, res) => {
   }
   // check for email
   let promise = new Promise((resolve, reject) => {
-    db.query(`SELECT * FROM sms_users WHERE email = ?`, email, (error, results, fields) => {
+    db.query("SELECT * FROM sms_users WHERE email = ?", email, (error, results, fields) => {
       if (error) {
+        console.log(error.message);
         reject({ status: 500, data: "ERROR" });
+        return;
       }
       console.log("results", results);
       if (results.length) {
@@ -48,6 +49,7 @@ router.post("/register", async (req, res) => {
           status: 400,
           data: { email: "email already exists" }
         });
+        return;
       }
       resolve(true);
     });
@@ -62,9 +64,11 @@ router.post("/register", async (req, res) => {
   if (!emailOk) return;
   // check for username
   promise = new Promise((resolve, reject) => {
-    db.query(`SELECT * FROM sms_users WHERE username = ?`, username, (error, results, fields) => {
+    db.query("SELECT * FROM sms_users WHERE username = ?", username, (error, results, fields) => {
       if (error) {
+        console.log(error.message);
         reject({ status: 500, data: "ERROR" });
+        return;
       }
       console.log("results", results);
       if (results.length) {
@@ -72,6 +76,7 @@ router.post("/register", async (req, res) => {
           status: 400,
           data: { username: "username already exists" }
         });
+        return;
       }
       resolve(true);
     });
@@ -89,10 +94,11 @@ router.post("/register", async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     db.query(
-      `INSERT INTO sms_users (username, email, password) VALUES (?, ?, ?)`,
+      "INSERT INTO sms_users (username, email, password) VALUES (?, ?, ?)",
       [username, email, hashedPassword],
       (error, results, fields) => {
         if (error) {
+          console.log(error.message);
           return res.status(500).send("ERROR");
         }
         console.log("results", results);
@@ -117,7 +123,6 @@ const loginSchema = {
 };
 
 router.post("/login", async (req, res) => {
-  console.log(req.body);
   // validate and login user
   const error = Joi.validate(req.body, loginSchema).error;
   if (error) {
@@ -128,9 +133,11 @@ router.post("/login", async (req, res) => {
   const { username, password } = req.body;
   // check for username
   let promise = new Promise((resolve, reject) => {
-    db.query(`SELECT * FROM sms_users WHERE username = ?`, username, (error, results, fields) => {
+    db.query("SELECT * FROM sms_users WHERE username = ?", username, (error, results, fields) => {
       if (error) {
+        console.log(error.message);
         reject({ status: 500, data: "ERROR" });
+        return;
       }
       console.log("results", results);
       if (!results.length) {
@@ -138,6 +145,7 @@ router.post("/login", async (req, res) => {
           status: 400,
           data: { username: "username does not match" }
         });
+        return;
       }
       resolve(results[0]);
     });
@@ -155,10 +163,12 @@ router.post("/login", async (req, res) => {
   if (!isValid) return res.status(400).json({ password: "password does not match" });
   // create and assign token
   const token = jwt.sign({ id: user.id }, process.env.TOKEN_SECRET);
-  res.set({
-    'Access-Control-Expose-Headers': 'Auth-Token',
-    'Auth-Token': token
-  }).send("OK");
+  res
+    .set({
+      "Access-Control-Expose-Headers": "Auth-Token",
+      "Auth-Token": token
+    })
+    .send("OK");
 });
 
 module.exports = router;

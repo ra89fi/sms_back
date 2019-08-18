@@ -15,7 +15,7 @@ const studentRootSchema = {
     .min(1)
     .required(),
   studentDetails: Joi.any().required(),
-  parentDetails: Joi.any().required(),
+  parentDetails: Joi.any().required()
   // previousExamDetails: Joi.any().required()
 };
 
@@ -134,6 +134,11 @@ const validateStudent = data => {
   return !errors.length;
 };
 
+const validateStudentDetails = data => {
+  const { error } = Joi.validate(data, studentDetailsSchema);
+  return !error;
+};
+
 // const createErrorMsgObjFromErrors = errors => {
 //   const obj = {};
 //   errors.forEach(error => {
@@ -149,5 +154,6 @@ module.exports = {
   studentDetailsSchema,
   parentDetailsSchema,
   validateStudent,
+  validateStudentDetails
   // createErrorMsgObjFromErrors
 };
