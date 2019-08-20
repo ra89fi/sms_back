@@ -56,8 +56,24 @@ router.post("/", (req, res) => {
         console.log(error.message);
         return res.status(500).send("ERROR");
       }
-      console.log("results", results);
-      if (results && results.insertId) res.send("OK");
+      console.log("details results", results);
+      if (results && results.insertId) {
+        // insert into admissions table
+        const { group, rollNo, school } = student;
+        db.query(
+          "INSERT INTO sms_admissions (studentId, class, `group`, rollNo, school) VALUES (?, ?, ?, ?, ?)",
+          [results.insertId, student.class, group, rollNo, school],
+          (error, results, fields) => {
+            if (error) {
+              console.log(error.message);
+              return res.status(500).send("ERROR");
+            }
+            console.log("admissions results", results);
+            if (results && results.insertId) return res.send("OK");
+            else return res.status(500).send("ERROR");
+          }
+        );
+      } else return res.status(500).send("ERROR");
     }
   );
 });
@@ -114,7 +130,7 @@ router.post("/:id", (req, res) => {
       console.log("results", results);
       if (results && results.affectedRows) {
         res.send("OK");
-      }
+      } else res.status(500).send("ERROR");
     }
   );
 });

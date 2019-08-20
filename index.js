@@ -11,7 +11,7 @@ const authRoute = require("./routes/auth");
 const queryRoute = require("./routes/query");
 
 const isAuthenticated = require("./middlewares/auth");
-const logger = require('./middlewares/logger');
+const logger = require("./middlewares/logger");
 
 const corsOptions = {
   origin: "*",

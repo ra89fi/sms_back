@@ -18,6 +18,7 @@ let sms_users = `CREATE TABLE IF NOT EXISTS sms_users (
 // OK
 let sms_student_details = `CREATE TABLE IF NOT EXISTS sms_student_details (
   id int(12) NOT NULL AUTO_INCREMENT,
+  date datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   firstName varchar(32) NOT NULL,
   lastName varchar(32) NOT NULL,
   nationality varchar(255) NOT NULL,
@@ -49,11 +50,13 @@ let sms_student_details = `CREATE TABLE IF NOT EXISTS sms_student_details (
   INDEX (mobileNo)
 ) ENGINE=InnoDB`;
 
+// OK
 let sms_admissions = `CREATE TABLE IF NOT EXISTS sms_admissions (
   id int(12) NOT NULL AUTO_INCREMENT,
+  date datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   studentId int(12) NOT NULL,
   class varchar(16) NOT NULL,
-  group varchar(64),
+  \`group\` varchar(64),
   rollNo varchar(12) NOT NULL,
   school varchar(255) NOT NULL,
   PRIMARY KEY (id),
@@ -62,11 +65,11 @@ let sms_admissions = `CREATE TABLE IF NOT EXISTS sms_admissions (
 
 let sms_attendances = `CREATE TABLE IF NOT EXISTS sms_attendances (
   id int(12) NOT NULL AUTO_INCREMENT,
+  date date NOT NULL,
   studentId int(12) NOT NULL,
   class varchar(16) NOT NULL,
   subject varchar(64) NOT NULL,
   status int(1) NOT NULL,
-  date date NOT NULL,
   PRIMARY KEY (id),
   INDEX (date)
 )`;
