@@ -135,4 +135,19 @@ router.post("/:id", (req, res) => {
   );
 });
 
+router.post("/delete/:id", (req, res) => {
+  const id = req.params.id;
+  if (!id) return res.status(400).send("ERROR");
+  db.query("DELETE FROM sms_student_details WHERE id=?", id, (error, results, fields) => {
+    if (error) {
+      console.log(error.message);
+      return res.status(500).send("ERROR");
+    }
+    console.log("results", results);
+    if (results && results.affectedRows) {
+      res.send("OK");
+    } else res.status(500).send("ERROR");
+  });
+});
+
 module.exports = router;
