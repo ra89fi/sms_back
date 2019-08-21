@@ -63,13 +63,22 @@ let sms_admissions = `CREATE TABLE IF NOT EXISTS sms_admissions (
   INDEX (studentId)
 ) ENGINE=InnoDB`;
 
+// OK
 let sms_attendances = `CREATE TABLE IF NOT EXISTS sms_attendances (
   id int(12) NOT NULL AUTO_INCREMENT,
   date date NOT NULL,
-  studentId int(12) NOT NULL,
   class varchar(16) NOT NULL,
+  group varchar(64),
   subject varchar(64) NOT NULL,
-  status int(1) NOT NULL,
-  PRIMARY KEY (id),
-  INDEX (date)
-)`;
+  PRIMARY KEY (id)
+) ENGINE=InnoDB`;
+
+// OK
+let sms_attendances_students = `CREATE TABLE IF NOT EXISTS sms_attendances_students (
+  attId int(12) NOT NULL,
+  studentId int(12) NOT NULL,
+  rollNo varchar(12) NOT NULL,
+  status varchar(64) NOT NULL,
+  notes varchar(255),
+  INDEX (attId)
+) ENGINE=InnoDB`;
