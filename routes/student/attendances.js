@@ -61,4 +61,39 @@ router.post("/", (req, res, next) => {
   }
 });
 
+router.post("/report", (req, res) => {
+  if (!req.body.class) return res.status(400).send("ERROR");
+  const { group, subject, dateFrom, dateTo } = req.body;
+  if (!subject || !dateFrom || !dateTo) return res.status(400).send("ERROR");
+  if (req.body.class == "9" || req.body.class == "10") {
+    if (!group) return res.status(400).send("ERROR");
+  }
+  // all OK
+  db.query(
+    "SELECT * FROM sms_attendances WHERE class=? AND`group`=? AND subject=? AND date=?",
+    [req.body.class, group, subject, dateFrom],
+    (error, results, fields) => {
+      if (error) {
+        console.log(error.message);
+        return res.status(500).send("ERROR");
+      }
+      console.log("results", results.length);
+      if (!results || !results.length) return res.status(500).send("ERROR");
+      // get students attendances
+      db.query(
+        "SELECT * FROM sms_attendances_students WHERE attId=?",
+        results[0].id,
+        (error, results, fields) => {
+          if (error) {
+            console.log(error.message);
+            return res.status(500).send("ERROR");
+          }
+          console.log("results", results.length);
+          res.status(200).json(results);
+        }
+      );
+    }
+  );
+});
+
 module.exports = router;
