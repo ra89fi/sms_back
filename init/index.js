@@ -82,3 +82,18 @@ let sms_attendances_students = `CREATE TABLE IF NOT EXISTS sms_attendances_stude
   notes varchar(255),
   INDEX (attId)
 ) ENGINE=InnoDB`;
+
+// OK
+let sms_teachers = `CREATE TABLE IF NOT EXISTS sms_teachers (
+  id int(12) NOT NULL AUTO_INCREMENT,
+  name varchar(255) NOT NULL,
+  mobileNo varchar(12) NOT NULL,
+  email varchar(255),
+  subject varchar(64) NOT NULL,
+  gender varchar(16) NOT NULL,
+  addVillage varchar(64) NOT NULL,
+  addPO varchar(64) NOT NULL,
+  addUpazilla varchar(64) NOT NULL,
+  addDistrict varchar(64) NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB`;
