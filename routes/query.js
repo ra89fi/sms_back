@@ -4,6 +4,7 @@ const studentDetailsRoute = require("./student/student_details");
 const admissionsRoute = require("./student/admissions");
 const attendancesRoute = require("./student/attendances");
 const teachersRoute = require("./teacher/teachers");
+const usersRoute = require("./user/users");
 
 router.get("/", (req, res) => {
   res.send("sms_demo working");
@@ -17,5 +18,6 @@ router.use("/student_details", studentDetailsRoute);
 router.use("/admissions", admissionsRoute);
 router.use("/attendances", attendancesRoute);
 router.use("/teachers", teachersRoute);
+router.use("/users", usersRoute);
 
 module.exports = router;
