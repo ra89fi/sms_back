@@ -61,6 +61,52 @@ router.get("/", (req, res) => {
   });
 });
 
+router.get("/:id", (req, res) => {
+  const id = req.params.id;
+  if (!id) return res.status(400).send("ERROR");
+  db.query("SELECT * FROM sms_teachers WHERE id=?", id, (error, results, fields) => {
+    if (error) {
+      console.log(error.message);
+      return res.status(500).send("ERROR");
+    }
+    console.log("results length", results.length);
+    res.json(results);
+  });
+});
+
+router.post("/:id", (req, res) => {
+  const id = req.params.id;
+  if (!id) return res.status(400).send("ERROR");
+  const teacher = req.body;
+  const {
+    name,
+    mobileNo,
+    email,
+    subject,
+    gender,
+    addVillage,
+    addPO,
+    addUpazilla,
+    addDistrict
+  } = teacher;
+  let error = Joi.validate(teacher, teacherSchema).error;
+  if (error) return res.status(400).send("ERROR");
+  db.query(
+    "UPDATE sms_teachers SET name=?, mobileNo=?, email=?, subject=?, gender=?, addVillage=?, addPO=?, addUpazilla=?, addDistrict=? WHERE id=?",
+    [name, mobileNo, email, subject, gender, addVillage, addPO, addUpazilla, addDistrict, id],
+    (error, results, fields) => {
+      if (error) {
+        console.log(error.message);
+        return res.status(500).send("ERROR");
+      }
+      console.log("results", results);
+      if (results && results.affectedRows) {
+        res.send("OK");
+      } else res.status(500).send("ERROR");
+    }
+  );
+});
+
 router.post("/delete/:id", (req, res) => {
   const id = req.params.id;
   if (!id) return res.status(400).send("ERROR");
