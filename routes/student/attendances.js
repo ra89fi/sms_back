@@ -69,9 +69,22 @@ router.post("/report", (req, res) => {
     if (!group) return res.status(400).send("ERROR");
   }
   // all OK
+  // create dates
+  const dates = [];
+  if (dateFrom == dateTo) dates.push(dateFrom);
+  else {
+    var d1 = new Date(dateFrom);
+    var d2 = new Date(dateTo);
+
+    while (d1 <= d2) {
+      dates.push(d1.toJSON().split("T")[0]);
+      d1 = new Date(d1.getTime() + 24 * 60 * 60 * 1000);
+      // break;
+    }
+  }
   db.query(
-    "SELECT * FROM sms_attendances WHERE class=? AND`group`=? AND subject=? AND date=?",
-    [req.body.class, group, subject, dateFrom],
+    "SELECT * FROM sms_attendances WHERE class=? AND`group`=? AND subject=? AND date IN ?",
+    [req.body.class, group, subject, [dates]],
     (error, results, fields) => {
       if (error) {
         console.log(error.message);
@@ -79,17 +92,22 @@ router.post("/report", (req, res) => {
       }
       console.log("results", results.length);
       if (!results || !results.length) return res.status(500).send("ERROR");
+      const json = { atts: results };
       // get students attendances
+      // creates ids
+      const ids = [];
+      results.forEach(row => ids.push(row.id));
       db.query(
-        "SELECT * FROM sms_attendances_students WHERE attId=?",
-        results[0].id,
+        "SELECT * FROM sms_attendances_students WHERE attId IN ?",
+        [[ids]],
         (error, results, fields) => {
           if (error) {
             console.log(error.message);
             return res.status(500).send("ERROR");
           }
           console.log("results", results.length);
-          res.status(200).json(results);
+          json.stus = results;
+          res.status(200).json(json);
         }
       );
     }
