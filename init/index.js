@@ -97,3 +97,35 @@ let sms_teachers = `CREATE TABLE IF NOT EXISTS sms_teachers (
   addDistrict varchar(64) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB`;
+
+// OK
+let sms_year_exams = `CREATE TABLE IF NOT EXISTS sms_year_exams(
+  id INT(12) NOT NULL AUTO_INCREMENT,
+  name VARCHAR(255) NOT NULL,
+  PRIMARY KEY(id)
+) ENGINE = INNODB`;
+
+// OK
+let sms_subject_exams = `CREATE TABLE IF NOT EXISTS sms_subject_exams(
+  id INT(12) NOT NULL AUTO_INCREMENT,
+  class VARCHAR(32) NOT NULL,
+  \`group\` VARCHAR(64) NOT NULL,
+  subject VARCHAR(64) NOT NULL,
+  yxid INT(12) NOT NULL,
+  date DATE NOT NULL,
+  marks VARCHAR(4) NOT NULL,
+  highest VARCHAR(4) NOT NULL,
+  PRIMARY KEY(id),
+  INDEX(yxid),
+  INDEX(class)
+) ENGINE = INNODB`;
+
+// OK
+let sms_marks = `CREATE TABLE IF NOT EXISTS sms_marks(
+  rollNo VARCHAR(12) NOT NULL,
+  marks VARCHAR(3) NOT NULL,
+  yxid INT(12) NOT NULL,
+  sxid INT(12) NOT NULL,
+  INDEX(yxid),
+  INDEX(sxid)
+) ENGINE = INNODB`;
