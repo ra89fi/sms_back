@@ -126,6 +126,8 @@ let sms_marks = `CREATE TABLE IF NOT EXISTS sms_marks(
   marks VARCHAR(3) NOT NULL,
   yxid INT(12) NOT NULL,
   sxid INT(12) NOT NULL,
+  studentId int(12) NOT NULL,
   INDEX(yxid),
-  INDEX(sxid)
+  INDEX(sxid),
+  INDEX(studentId)
 ) ENGINE = INNODB`;
