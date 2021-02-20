@@ -68,7 +68,7 @@ let sms_attendances = `CREATE TABLE IF NOT EXISTS sms_attendances (
   id int(12) NOT NULL AUTO_INCREMENT,
   date date NOT NULL,
   class varchar(16) NOT NULL,
-  group varchar(64),
+  \`group\` varchar(64),
   subject varchar(64) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB`;
